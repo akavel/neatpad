@@ -1,5 +1,5 @@
 //
-//	Neatpad - simple text editor application 
+//	Neatpad - Simple Text Editor application 
 //
 //	www.catch22.net
 //	Written by J Brown 2004
@@ -67,20 +67,68 @@ void SetWindowFileName(HWND hwnd, TCHAR *szFileName)
 	SetWindowText(hwnd, ach);
 }
 
+BOOL DoOpenFile(HWND hwnd, TCHAR *szFileName, TCHAR *szFileTitle)
+{
+	if(TextView_OpenFile(hwndTextView, szFileName))
+	{
+		SetWindowFileName(hwnd, szFileTitle);
+		return TRUE;
+	}
+	else
+	{
+		MessageBox(hwnd, _T("Error opening file"), APP_TITLE, MB_ICONEXCLAMATION);
+		return FALSE;
+	}
+}
+
+//
+//	How to process WM_DROPFILES
+//
+void HandleDropFiles(HWND hwnd, HDROP hDrop)
+{
+	TCHAR buf[MAX_PATH];
+	TCHAR *name;
+	
+	if(DragQueryFile(hDrop, 0, buf, MAX_PATH))
+	{
+		strcpy(szFileName, buf);
+
+		name = strrchr(szFileName, '\\');
+		strcpy(szFileTitle, name ? name+1 : buf);
+
+		DoOpenFile(hwnd, szFileName, szFileTitle);
+	}
+	
+	DragFinish(hDrop);
+}
+
 //
 //	Main window procedure
 //
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static int width, height;
+	HFONT hFont;
 
 	switch(msg)
 	{
 	case WM_CREATE:
 		hwndTextView = CreateTextView(hwnd);
 
+		hFont = CreateFont(-13,0,0,0,0,0,0,0,0,0,0,0,0, "Courier New");
+
+		// change the font
+		SendMessage(hwndTextView, WM_SETFONT, (WPARAM)hFont, 0);
+
 		// automatically create new document when we start
 		PostMessage(hwnd, WM_COMMAND, IDM_FILE_NEW, 0);
+
+		// tell windows that we can handle drag+drop'd files
+		DragAcceptFiles(hwnd, TRUE);
+		return 0;
+
+	case WM_DROPFILES:
+		HandleDropFiles(hwnd, (HDROP)wParam);
 		return 0;
 
 	case WM_DESTROY:
@@ -91,7 +139,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		switch(LOWORD(wParam))
 		{
 		case IDM_FILE_NEW:
-
+			
 			SetWindowFileName(hwnd, _T("Untitled"));
 			TextView_Clear(hwndTextView);
 			
@@ -102,14 +150,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			// get a filename to open
 			if(ShowOpenFileDlg(hwnd, szFileName, szFileTitle))
 			{
-				if(TextView_OpenFile(hwndTextView, szFileName))
-				{
-					SetWindowFileName(hwnd, szFileTitle);
-				}
-				else
-				{
-					MessageBox(hwnd, _T("Error opening file"), APP_TITLE, MB_ICONEXCLAMATION);
-				}
+				DoOpenFile(hwnd, szFileName, szFileTitle);
 			}
 
 			return 0;
@@ -118,6 +159,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			ShowAboutDlg(hwnd);
 			return 0;
 		}
+		return 0;
+
+	case WM_SETFOCUS:
+		SetFocus(hwndTextView);
 		return 0;
 
 	case WM_CLOSE:
