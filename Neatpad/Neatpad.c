@@ -1,5 +1,5 @@
 //
-//	Neatpad - simple text editor application
+//	Neatpad - simple text editor application 
 //
 //	www.catch22.net
 //	Written by J Brown 2004
@@ -25,7 +25,7 @@ TCHAR szFileTitle[MAX_PATH];
 
 #pragma comment(linker, "/OPT:NOWIN98")
 
-BOOL ShowOpenFileDlg(HWND hwnd, PSTR pstrFileName, PSTR pstrTitleName)
+BOOL ShowOpenFileDlg(HWND hwnd, TCHAR *pstrFileName, TCHAR *pstrTitleName)
 {
 	TCHAR *szFilter = _T("Text Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0\0");
 	
@@ -91,7 +91,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		switch(LOWORD(wParam))
 		{
 		case IDM_FILE_NEW:
+
 			SetWindowFileName(hwnd, _T("Untitled"));
+			TextView_Clear(hwndTextView);
+			
 			return 0;
 
 		case IDM_FILE_OPEN:
@@ -99,7 +102,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			// get a filename to open
 			if(ShowOpenFileDlg(hwnd, szFileName, szFileTitle))
 			{
-				SetWindowFileName(hwnd, szFileTitle);
+				if(TextView_OpenFile(hwndTextView, szFileName))
+				{
+					SetWindowFileName(hwnd, szFileTitle);
+				}
+				else
+				{
+					MessageBox(hwnd, _T("Error opening file"), APP_TITLE, MB_ICONEXCLAMATION);
+				}
 			}
 
 			return 0;
