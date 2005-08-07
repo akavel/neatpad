@@ -1,0 +1,97 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: TextView - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\James\LOCALS~1\Temp\RSP3E.tmp" with contents
+[
+/nologo /MD /W3 /GX /O1 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FR"Release/" /Fp"Release/TextView.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"C:\src\win32\Neatpad07\TextView\TextDocument.cpp"
+"C:\src\win32\Neatpad07\TextView\TextView.cpp"
+"C:\src\win32\Neatpad07\TextView\TextViewFile.cpp"
+"C:\src\win32\Neatpad07\TextView\TextViewFont.cpp"
+"C:\src\win32\Neatpad07\TextView\TextViewMouse.cpp"
+"C:\src\win32\Neatpad07\TextView\TextViewPaint.cpp"
+"C:\src\win32\Neatpad07\TextView\TextViewScroll.cpp"
+"C:\src\common\Trace.c"
+]
+Creating command line "cl.exe @C:\DOCUME~1\James\LOCALS~1\Temp\RSP3E.tmp" 
+Creating temporary file "C:\DOCUME~1\James\LOCALS~1\Temp\RSP3F.tmp" with contents
+[
+/nologo /out:"Release\TextView.lib" 
+.\Release\TextDocument.obj
+.\Release\TextView.obj
+.\Release\TextViewFile.obj
+.\Release\TextViewFont.obj
+.\Release\TextViewMouse.obj
+.\Release\TextViewPaint.obj
+.\Release\TextViewScroll.obj
+.\Release\Trace.obj
+]
+Creating command line "link.exe -lib @C:\DOCUME~1\James\LOCALS~1\Temp\RSP3F.tmp"
+<h3>Output Window</h3>
+Compiling...
+TextDocument.cpp
+TextView.cpp
+TextViewFile.cpp
+TextViewFont.cpp
+TextViewMouse.cpp
+TextViewPaint.cpp
+TextViewScroll.cpp
+Trace.c
+C:\src\common\Trace.c(35) : warning C4013: '_vsnwprintf' undefined; assuming extern returning int
+C:\src\common\Trace.c(54) : warning C4013: '_vsnprintf' undefined; assuming extern returning int
+Creating library...
+<h3>
+--------------------Configuration: Neatpad - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x809 /fo"Release/resource.res" /d "NDEBUG" "C:\src\win32\Neatpad07\Neatpad\resource.rc"" 
+Creating temporary file "C:\DOCUME~1\James\LOCALS~1\Temp\RSP41.tmp" with contents
+[
+/nologo /MD /W3 /GX /O1 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /FR"Release/" /Fp"Release/Neatpad.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"C:\src\win32\Neatpad07\Neatpad\Neatpad.c"
+"C:\src\win32\Neatpad07\Neatpad\NeatUtils.c"
+"C:\src\win32\Neatpad07\Neatpad\Options.c"
+"C:\src\win32\Neatpad07\Neatpad\OptionsDisplay.c"
+"C:\src\win32\Neatpad07\Neatpad\OptionsFont.c"
+"C:\src\win32\Neatpad07\Neatpad\OptionsMisc.c"
+"C:\src\win32\Neatpad07\Neatpad\Printing.c"
+]
+Creating command line "cl.exe @C:\DOCUME~1\James\LOCALS~1\Temp\RSP41.tmp" 
+Creating temporary file "C:\DOCUME~1\James\LOCALS~1\Temp\RSP42.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /incremental:no /pdb:"..\Release/Neatpad.pdb" /machine:I386 /out:"..\Release/Neatpad.exe" 
+.\Release\Neatpad.obj
+.\Release\NeatUtils.obj
+.\Release\Options.obj
+.\Release\OptionsDisplay.obj
+.\Release\OptionsFont.obj
+.\Release\OptionsMisc.obj
+.\Release\Printing.obj
+.\Release\resource.res
+\src\win32\Neatpad07\TextView\Release\TextView.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\James\LOCALS~1\Temp\RSP42.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+Neatpad.c
+NeatUtils.c
+Options.c
+OptionsDisplay.c
+OptionsFont.c
+OptionsMisc.c
+Printing.c
+Linking...
+
+
+
+<h3>Results</h3>
+Neatpad.exe - 0 error(s), 2 warning(s)
+</pre>
+</body>
+</html>

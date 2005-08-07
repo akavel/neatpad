@@ -1,0 +1,99 @@
+# Microsoft Developer Studio Generated Dependency File, included by TextView.mak
+
+.\TextDocument.cpp : \
+	"..\..\..\..\msvs\sdk2003\include\basetsd.h"\
+	"..\..\..\..\msvs\sdk2003\include\guiddef.h"\
+	"..\..\..\..\msvs\sdk2003\include\propidl.h"\
+	"..\..\..\..\msvs\sdk2003\include\reason.h"\
+	"..\..\..\..\msvs\sdk2003\include\stralign.h"\
+	"..\..\..\..\msvs\sdk2003\include\tvout.h"\
+	"..\..\..\..\msvs\sdk2003\include\winefs.h"\
+	".\TextDocument.h"\
+	
+
+.\TextView.cpp : \
+	"..\..\..\..\msvs\sdk2003\include\basetsd.h"\
+	"..\..\..\..\msvs\sdk2003\include\guiddef.h"\
+	"..\..\..\..\msvs\sdk2003\include\propidl.h"\
+	"..\..\..\..\msvs\sdk2003\include\reason.h"\
+	"..\..\..\..\msvs\sdk2003\include\stralign.h"\
+	"..\..\..\..\msvs\sdk2003\include\tvout.h"\
+	"..\..\..\..\msvs\sdk2003\include\winefs.h"\
+	".\racursor.h"\
+	".\TextDocument.h"\
+	".\TextView.h"\
+	".\TextViewInternal.h"\
+	
+
+.\TextViewFile.cpp : \
+	"..\..\..\..\msvs\sdk2003\include\basetsd.h"\
+	"..\..\..\..\msvs\sdk2003\include\guiddef.h"\
+	"..\..\..\..\msvs\sdk2003\include\propidl.h"\
+	"..\..\..\..\msvs\sdk2003\include\reason.h"\
+	"..\..\..\..\msvs\sdk2003\include\stralign.h"\
+	"..\..\..\..\msvs\sdk2003\include\tvout.h"\
+	"..\..\..\..\msvs\sdk2003\include\winefs.h"\
+	".\TextDocument.h"\
+	".\TextView.h"\
+	".\TextViewInternal.h"\
+	
+
+.\TextViewFont.cpp : \
+	"..\..\..\..\msvs\sdk2003\include\basetsd.h"\
+	"..\..\..\..\msvs\sdk2003\include\guiddef.h"\
+	"..\..\..\..\msvs\sdk2003\include\propidl.h"\
+	"..\..\..\..\msvs\sdk2003\include\reason.h"\
+	"..\..\..\..\msvs\sdk2003\include\stralign.h"\
+	"..\..\..\..\msvs\sdk2003\include\tvout.h"\
+	"..\..\..\..\msvs\sdk2003\include\winefs.h"\
+	".\TextDocument.h"\
+	".\TextView.h"\
+	".\TextViewInternal.h"\
+	
+
+.\TextViewMouse.cpp : \
+	"..\..\..\..\msvs\sdk2003\include\basetsd.h"\
+	"..\..\..\..\msvs\sdk2003\include\guiddef.h"\
+	"..\..\..\..\msvs\sdk2003\include\propidl.h"\
+	"..\..\..\..\msvs\sdk2003\include\reason.h"\
+	"..\..\..\..\msvs\sdk2003\include\stralign.h"\
+	"..\..\..\..\msvs\sdk2003\include\tvout.h"\
+	"..\..\..\..\msvs\sdk2003\include\winefs.h"\
+	".\TextDocument.h"\
+	".\TextView.h"\
+	".\TextViewInternal.h"\
+	
+
+.\TextViewPaint.cpp : \
+	"..\..\..\..\msvs\sdk2003\include\basetsd.h"\
+	"..\..\..\..\msvs\sdk2003\include\guiddef.h"\
+	"..\..\..\..\msvs\sdk2003\include\propidl.h"\
+	"..\..\..\..\msvs\sdk2003\include\reason.h"\
+	"..\..\..\..\msvs\sdk2003\include\stralign.h"\
+	"..\..\..\..\msvs\sdk2003\include\tvout.h"\
+	"..\..\..\..\msvs\sdk2003\include\winefs.h"\
+	".\TextDocument.h"\
+	".\TextView.h"\
+	".\TextViewInternal.h"\
+	
+
+.\TextViewScroll.cpp : \
+	"..\..\..\..\msvs\sdk2003\include\basetsd.h"\
+	"..\..\..\..\msvs\sdk2003\include\guiddef.h"\
+	"..\..\..\..\msvs\sdk2003\include\propidl.h"\
+	"..\..\..\..\msvs\sdk2003\include\reason.h"\
+	"..\..\..\..\msvs\sdk2003\include\stralign.h"\
+	"..\..\..\..\msvs\sdk2003\include\tvout.h"\
+	"..\..\..\..\msvs\sdk2003\include\winefs.h"\
+	".\TextDocument.h"\
+	".\TextView.h"\
+	".\TextViewInternal.h"\
+	
+
+..\..\..\common\Trace.c : \
+	"..\..\..\..\msvs\sdk2003\include\basetsd.h"\
+	"..\..\..\..\msvs\sdk2003\include\guiddef.h"\
+	"..\..\..\..\msvs\sdk2003\include\reason.h"\
+	"..\..\..\..\msvs\sdk2003\include\stralign.h"\
+	"..\..\..\..\msvs\sdk2003\include\tvout.h"\
+	
