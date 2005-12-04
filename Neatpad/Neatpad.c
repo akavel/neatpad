@@ -22,10 +22,13 @@ HWND		g_hwndMain;
 HWND		g_hwndTextView;
 HFONT		g_hFont;
 
-TCHAR szFileName[MAX_PATH];
-TCHAR szFileTitle[MAX_PATH];
+TCHAR g_szFileName[MAX_PATH];
+TCHAR g_szFileTitle[MAX_PATH];
 
 #pragma comment(linker, "/OPT:NOWIN98")
+
+BOOL SaveFileData(TCHAR *szPath, HWND hwnd);
+BOOL LoadFileData(TCHAR *szPath, HWND hwnd);
 
 void ShowProperties(HWND hwndParent);
 void LoadRegSettings();
@@ -73,18 +76,45 @@ void SetWindowFileName(HWND hwnd, TCHAR *szFileName)
 	SetWindowText(hwnd, ach);
 }
 
-BOOL DoOpenFile(HWND hwnd, TCHAR *szFileName, TCHAR *szFileTitle)
+BOOL DoOpenFile(HWND hwndMain, TCHAR *szFileName, TCHAR *szFileTitle)
 {
+	int fmt, fmtlook[] = 
+	{
+		IDM_VIEW_ASCII, IDM_VIEW_UTF8, IDM_VIEW_UTF16, IDM_VIEW_UTF16BE 
+	};
+
 	if(TextView_OpenFile(g_hwndTextView, szFileName))
 	{
-		SetWindowFileName(hwnd, szFileTitle);
+		SetWindowFileName(hwndMain, szFileTitle);
+
+		fmt = TextView_GetFormat(g_hwndTextView);
+
+		CheckMenuRadioItem(GetMenu(hwndMain), 
+			IDM_VIEW_ASCII, IDM_VIEW_UTF16BE, 
+			fmtlook[fmt], MF_BYCOMMAND);
+
 		return TRUE;
 	}
 	else
 	{
-		MessageBox(hwnd, _T("Error opening file"), APP_TITLE, MB_ICONEXCLAMATION);
+		MessageBox(hwndMain, _T("Error opening file"), APP_TITLE, MB_ICONEXCLAMATION);
 		return FALSE;
 	}
+}
+
+void NeatpadOpenFile(HWND hwnd, TCHAR *szFile)
+{
+	TCHAR *name;
+
+	// save current file's position!
+	SaveFileData(g_szFileName, hwnd);
+
+	_tcscpy(g_szFileName, szFile);
+
+	name = _tcsrchr(g_szFileName, '\\');
+	_tcscpy(g_szFileTitle, name ? name+1 : szFile);
+
+	DoOpenFile(hwnd, g_szFileName, g_szFileTitle);
 }
 
 //
@@ -93,16 +123,10 @@ BOOL DoOpenFile(HWND hwnd, TCHAR *szFileName, TCHAR *szFileTitle)
 void HandleDropFiles(HWND hwnd, HDROP hDrop)
 {
 	TCHAR buf[MAX_PATH];
-	TCHAR *name;
 	
 	if(DragQueryFile(hDrop, 0, buf, MAX_PATH))
 	{
-		strcpy(szFileName, buf);
-
-		name = strrchr(szFileName, '\\');
-		strcpy(szFileTitle, name ? name+1 : buf);
-
-		DoOpenFile(hwnd, szFileName, szFileTitle);
+		NeatpadOpenFile(hwnd, buf);
 	}
 	
 	DragFinish(hDrop);
@@ -160,10 +184,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		TextView_SetLineImage(g_hwndTextView, 36, 1);
 		TextView_SetLineImage(g_hwndTextView, 11, 1);
 
-		// automatically create new document when we start
-		//PostMessage(hwnd, WM_COMMAND, IDM_FILE_NEW, 0);
-		DoOpenFile(hwnd, "c:\\src\\edit\\test.cpp", "test.cpp");
-
 		// tell windows that we can handle drag+drop'd files
 		DragAcceptFiles(hwnd, TRUE);
 		return 0;
@@ -173,6 +193,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	case WM_DESTROY:
+		SaveFileData(g_szFileName, hwnd);
 		PostQuitMessage(0);
 		DeleteObject(g_hFont);
 		return 0;
@@ -196,9 +217,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case IDM_FILE_OPEN:
 
 			// get a filename to open
-			if(ShowOpenFileDlg(hwnd, szFileName, szFileTitle))
+			if(ShowOpenFileDlg(hwnd, g_szFileName, g_szFileTitle))
 			{
-				DoOpenFile(hwnd, szFileName, szFileTitle);
+				DoOpenFile(hwnd, g_szFileName, g_szFileTitle);
 			}
 
 			return 0;
@@ -302,6 +323,16 @@ HWND CreateMainWnd()
 				NULL);					// creation parameters
 }
 
+TCHAR **GetArgvCommandLine(int *argc)
+{
+#ifdef UNICODE
+	return CommandLineToArgvW(GetCommandLineW(), argc);
+#else
+	*argc = __argc;
+	return __argv;
+#endif
+}
+
 //
 //	Entry-point for text-editor application
 //
@@ -309,6 +340,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int iShowC
 {
 	MSG			msg;
 	HACCEL		hAccel;
+	TCHAR		**argv;
+	int			argc;
+
 
 	// initialize window classes
 	InitMainWnd();
@@ -319,14 +353,34 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int iShowC
 	// create the main window!
 	g_hwndMain = CreateMainWnd();
 
-	ShowWindow(g_hwndMain, iShowCmd);
+	//
+	//	Parse the commandline
+	//
+	argv = GetArgvCommandLine(&argc);
+	
+	if(argv && argc >= 2)
+	{
+		// open file specified on commmand line
+		NeatpadOpenFile(g_hwndMain, argv[1]);
+		LoadFileData(argv[1], g_hwndMain);
+	}
+	else
+	{
+		// automatically create new document when we start
+		PostMessage(g_hwndMain, WM_COMMAND, IDM_FILE_NEW, 0);
+	}
 
 	ApplyRegSettings();
+	ShowWindow(g_hwndMain, iShowCmd);
 
+	//
 	// load keyboard accelerator table
+	//
 	hAccel = LoadAccelerators(hInst, MAKEINTRESOURCE(IDR_ACCELERATOR1));
 
+	//
 	// message-loop
+	//
 	while(GetMessage(&msg, NULL, 0, 0) > 0)
 	{
 		if(!TranslateAccelerator(g_hwndMain, hAccel, &msg))
