@@ -14,6 +14,10 @@
 #include "..\TextView\TextView.h"
 #include "resource.h"
 
+#ifndef UNICODE
+#error "Please build as Unicode only!"
+#endif
+
 #define APP_TITLE   _T("Neatpad")
 #define WEBSITE_STR _T("www.catch22.net")
 
@@ -26,6 +30,8 @@ TCHAR g_szFileName[MAX_PATH];
 TCHAR g_szFileTitle[MAX_PATH];
 
 #pragma comment(linker, "/OPT:NOWIN98")
+
+BOOL ResolveShortcut(TCHAR *pszShortcut, TCHAR *pszFilePath, int nPathLen);
 
 BOOL SaveFileData(TCHAR *szPath, HWND hwnd);
 BOOL LoadFileData(TCHAR *szPath, HWND hwnd);
@@ -126,6 +132,13 @@ void HandleDropFiles(HWND hwnd, HDROP hDrop)
 	
 	if(DragQueryFile(hDrop, 0, buf, MAX_PATH))
 	{
+		TCHAR tmp[MAX_PATH];
+		
+		if(ResolveShortcut(buf, tmp, MAX_PATH))
+			lstrcpy(buf,tmp);
+
+		OutputDebugString(L"done dropfiles\n");
+
 		NeatpadOpenFile(hwnd, buf);
 	}
 	
@@ -343,6 +356,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int iShowC
 	TCHAR		**argv;
 	int			argc;
 
+	OleInitialize(0);
 
 	// initialize window classes
 	InitMainWnd();
@@ -393,5 +407,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int iShowC
 	if(g_fSaveOnExit)
 		SaveRegSettings();
 
+	OleUninitialize();
 	return 0;
 }
